@@ -3,12 +3,13 @@ import { ZoomMtg } from "@zoom/meetingsdk";
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
+const sdkKey = "6RWFPtGQnKZFtsqDksXVQ";
+// const sdkKey = "F1xR4qi3SJa9l12vRq5iLg"
 
 function App() {
-  const authEndpoint = ""; // http://localhost:4000
-  const sdkKey = "";
-  const meetingNumber = "";
-  const passWord = "";
+  const authEndpoint = "http://localhost:8080/zoom";
+  const meetingNumber = "85358690826";
+  const passWord = "4bZ3turjjhwDCurXSY35JSITxjNtxJ.1";
   const role = 0;
   const userName = "React";
   const userEmail = "";
@@ -26,9 +27,9 @@ function App() {
           role: role,
         }),
       });
-      const res = await req.json()
+      const res = await req.json();
       const signature = res.signature as string;
-      startMeeting(signature)
+      startMeeting(signature);
     } catch (e) {
       console.log(e);
     }
