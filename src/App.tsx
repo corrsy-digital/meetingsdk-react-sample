@@ -1,21 +1,23 @@
+import { useEffect } from "react";
 import "./App.css";
 import { ZoomMtg } from "@zoom/meetingsdk";
 
 ZoomMtg.preLoadWasm();
 ZoomMtg.prepareWebSDK();
-const sdkKey = "6RWFPtGQnKZFtsqDksXVQ";
-// const sdkKey = "F1xR4qi3SJa9l12vRq5iLg"
 
 function App() {
-  const authEndpoint = "http://localhost:8080/zoom";
-  const meetingNumber = "85358690826";
-  const passWord = "4bZ3turjjhwDCurXSY35JSITxjNtxJ.1";
-  const role = 0;
-  const userName = "React";
-  const userEmail = "";
+  const urlParams = new URLSearchParams(window.location.search);
+  const sdkKey = urlParams.get("sdkKey") || "";
+  const authEndpoint = urlParams.get("authEndpoint") || "";
+  const meetingNumber = urlParams.get("meetingNumber") || "";
+  const passWord = urlParams.get("passWord") || "";
+  const role = urlParams.get("role") ? parseInt(urlParams.get("role")!) : 0;
+  const userName = urlParams.get("userName") || "Student";
+  const userEmail = urlParams.get("userEmail") || "";
   const registrantToken = "";
   const zakToken = "";
-  const leaveUrl = "http://localhost:5173";
+  const leaveUrl = urlParams.get("leaveUrl") || window.location.origin;
+  const leaveParams = urlParams.get("leaveParams") || "";
 
   const getSignature = async () => {
     try {
@@ -39,7 +41,7 @@ function App() {
     document.getElementById("zmmtg-root")!.style.display = "block";
 
     ZoomMtg.init({
-      leaveUrl: leaveUrl,
+      leaveUrl: leaveUrl + leaveParams,
       patchJsMedia: true,
       leaveOnPageUnload: true,
       success: (success: unknown) => {
@@ -68,11 +70,14 @@ function App() {
     });
   }
 
+  useEffect(() => {
+    getSignature();
+  }, []);
+
   return (
     <div className="App">
       <main>
-        <h1>Zoom Meeting SDK Sample React</h1>
-        <button onClick={getSignature}>Join Meeting</button>
+        <h1 style={{ marginTop: 20 }}>Meeting</h1>
       </main>
     </div>
   );
